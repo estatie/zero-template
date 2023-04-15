@@ -4,6 +4,10 @@ import (
 	"flag"
 	"fmt"
 
+	// @start.api.middlewares: import default middlewares
+	"zero/zoo/web/middle"
+	// @end.api.middlewares: import default middlewares
+
 	{{.importPackages}}
 )
 
@@ -17,6 +21,12 @@ func main() {
 
 	server := rest.MustNewServer(c.RestConf)
 	defer server.Stop()
+
+	// @start.api.middlewares: inject default middlewares
+	for _, mw := range middle.NewDefault(c.RestConf) {
+		server.Use(mw)
+	}
+	// @end.api.middlewares: inject default middlewares
 
 	ctx := svc.NewServiceContext(c)
 	handler.RegisterHandlers(server, ctx)
