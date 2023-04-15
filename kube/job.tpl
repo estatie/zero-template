@@ -11,7 +11,7 @@ spec:
       template:
         spec:{{if .ServiceAccount}}
           serviceAccountName: {{.ServiceAccount}}{{end}}
-	      {{end}}containers:
+	      containers:
           - name: {{.Name}}
             image: # todo image url
             resources:
