@@ -1,15 +1,11 @@
 package svc
 
-import (
-	{{.configImport}}
-)
-
 type ServiceContext struct {
-	Config {{.config}}
+	Config Config
 	{{.middleware}}
 }
 
-func NewServiceContext(c {{.config}}) *ServiceContext {
+func NewServiceContext(c Config) *ServiceContext {
 	return &ServiceContext{
 		Config: c,
 		{{.middlewareAssignment}}
