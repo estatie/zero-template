@@ -1,21 +1,21 @@
 syntax = "v1"
 
 info(
-  title: "{{.name}}"
-  desc: "{{.handler}} service"
-  author: "estatie"
-  email: "reg@xcono.com"
+  title: "record" 			    // todo replace with your service name
+  desc: "Record service" 		// todo replace with your service description
+  author: "estatie" 			// todo replace with your company name
+  email: "reg@xcono.com" 		// todo replace with your company email
 )
 
 type (
 
   IDReq {
-    ID string `path:"id"`
+    ID uint64 `path:"id"`
   }
 
   {{.handler}} {
-    ID string `json:"id"`
-    OrgID string `json:"orgID"`
+    ID uint64 `json:"id"`
+    OrgID uint64 `json:"orgID"`
     Name string `json:"status"`
     Created string `json:"created"`
   }
@@ -25,18 +25,18 @@ type (
   }
 
   {{.handler}}Create {
-    OrgID string `json:"orgID"`
+    OrgID uint64 `json:"orgID"`
     Name string `json:"status"`
   }
 
   {{.handler}}Update {
-    ID string `json:"id"`
+    ID uint64 `json:"id"`
     Name string `json:"status"`
   }
 )
 
-@server(
-  jwt: Auth
+@server (
+  group: {{.name}} // todo replace with your service group
 )
 
 service {{.name}}-api {
@@ -62,7 +62,7 @@ service {{.name}}-api {
   put /{{.name}}s ({{.handler}}Update) returns ({{.handler}})
 
   // todo tests, access, logic
-  @doc "Delete {{.handler}} by {{.handler}}Update.ID and returns deleted {{.handler}}"
+  @doc "Delete {{.handler}} by {{.handler}}.ID and returns deleted {{.handler}}"
   @handler Delete
   delete /{{.name}}s/:id (IDReq) returns ({{.handler}})
 }
