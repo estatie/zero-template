@@ -1,7 +1,7 @@
 package svc
 
 import {{.authImport}}
-import "github.com/estatie/goctl-pet/pkg/enter"
+import "github.com/estatie/pet/pkg/enter"
 
 type Config struct {
 	rest.RestConf
