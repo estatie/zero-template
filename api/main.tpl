@@ -19,7 +19,7 @@ server := rest.MustNewServer(c.RestConf)
 defer server.Stop()
 
 ctx := svc.NewServiceContext(c)
-handler.RegisterHandlers(server, ctx)
+web.RegisterHandlers(server, ctx)
 
 fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 server.Start()
