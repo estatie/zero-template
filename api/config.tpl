@@ -1,4 +1,4 @@
-package svc
+package config
 
 import {{.authImport}}
 import "github.com/estatie/pet/pkg/enter"
