@@ -1,11 +1,11 @@
 package svc
 
 import {{.authImport}}
-import "github.com/estatie/pet/pkg/enter"
+import "github.com/estatie/pet/pkg/entex"
 
 type Config struct {
 	rest.RestConf
-	Mysql enter.MysqlConf
+	Mysql entex.MysqlConf
 	{{.auth}}
 	{{.jwtTrans}}
 }
