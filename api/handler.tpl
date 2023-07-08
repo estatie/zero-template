@@ -14,8 +14,9 @@ if err := httpx.Parse(r, &req); err != nil {
 httpx.ErrorCtx(r.Context(), w, err)
 return
 }
-
-{{end}}l := {{.LogicName}}.New{{.LogicType}}(r.Context(), svcCtx)
+{{end}}
+{{/* workaround: Capitalized .LogicName replaced with lowercase .PkgName since it must be equal (use/web groups have same subpackages names */}}
+l := {{.PkgName}}.New{{.LogicType}}(r.Context(), svcCtx)
 {{if .HasResp}}resp, {{end}}err := l.{{.Call}}({{if .HasRequest}}&req{{end}})
 if err != nil {
 httpx.ErrorCtx(r.Context(), w, err)
