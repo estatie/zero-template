@@ -4,6 +4,8 @@ import (
 "flag"
 "fmt"
 "github.com/ory/graceful"
+"github.com/estatie/pet/pkg/zero"
+"github.com/zeromicro/go-zero/rest/httpx"
 {{.importPackages}}
 )
 
@@ -14,16 +16,13 @@ func main() {
 config := Config()
 service := svc.NewServiceContext(config)
 
-start := func() error {
 // async if server mode enabled
 // blocking if only worker mode enabled
 err := Worker(service)
+
 // blocking if server mode enabled
 Server(service)
-return err
-}
 
-err := graceful.Graceful(start, service.Shutdown)
 if err != nil {
 fmt.Println(err)
 }
@@ -50,10 +49,15 @@ defer server.Stop()
 
 // register handlers
 web.RegisterHandlers(server, service)
+httpx.SetErrorHandlerCtx(zero.ErrorHandler)
 
 // start server
 fmt.Printf("Starting server at %s:%d...\n", cfg.Host, cfg.Port)
-server.Start()
+server.StartWithOpts(func(svr *http.Server) {
+svr.RegisterOnShutdown(func() {
+_ = service.Shutdown(context.Background())
+})
+})
 fmt.Println("Server stopped.")
 }
 
@@ -78,8 +82,13 @@ service.Scheduler(ctx).StartAsync()
 return nil
 }
 
-// if only worker mode enabled, start scheduler blocking
+// if only worker mode enabled
+start := func() error {
+// start scheduler blocking
 service.Scheduler(ctx).StartBlocking()
-
 return nil
+}
+
+// supposed service.Shutdown stops the scheduler
+return graceful.Graceful(start, service.Shutdown)
 }
