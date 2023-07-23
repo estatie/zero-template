@@ -47,9 +47,12 @@ cfg := service.Config
 server := rest.MustNewServer(cfg.RestConf)
 defer server.Stop()
 
+// provide middlewares
+server.Use(zero.RequestIDMiddleware)
+
 // register handlers
 web.RegisterHandlers(server, service)
-httpx.SetErrorHandlerCtx(zero.ErrorHandler)
+httpx.SetErrorHandlerCtx(zero.NewErrorHandler(log.New().Named(cfg.Name)).Handle)
 
 // start server
 fmt.Printf("Starting server at %s:%d...\n", cfg.Host, cfg.Port)
