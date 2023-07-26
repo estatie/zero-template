@@ -1,5 +1,4 @@
 FROM golang:{{.Version}}alpine AS builder
-ARG GIT_AUTH_TOKEN
 
 LABEL stage=gobuilder
 
