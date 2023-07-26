@@ -20,8 +20,7 @@ RUN go build -ldflags="-s -w" -o /app/{{.ExeFile}} {{.GoFile}}
 # compose final image
 FROM {{.BaseImage}}
 
-COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
-{{if .HasTimezone}}
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt{{if .HasTimezone}}
 COPY --from=builder /usr/share/zoneinfo/{{.Timezone}} /usr/share/zoneinfo/{{.Timezone}}
 ENV TZ {{.Timezone}}
 {{end}}
