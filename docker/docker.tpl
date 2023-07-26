@@ -1,4 +1,5 @@
 FROM golang:{{.Version}}alpine AS builder
+ARG GIT_AUTH_TOKEN
 
 LABEL stage=gobuilder
 
@@ -6,6 +7,9 @@ ENV CGO_ENABLED 0
 RUN apk update --no-cache && apk add --no-cache git ca-certificates openssh-client {{if .HasTimezone}}tzdata{{end}}
 
 WORKDIR /build
+
+RUN go env -w GOPRIVATE=github.com/estatie/*
+RUN git config --global url."https://${GIT_AUTH_TOKEN}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 
 ADD go.mod .
 ADD go.sum .
